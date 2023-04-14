@@ -1,4 +1,5 @@
 import React from "react";
+import UserList from "./UserList";
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -19,36 +20,48 @@ export default class Login extends React.Component {
   }
 
   handleSubmit(event) {
-    const url = 'http://localhost:8000/api-token-auth/';
+    const url = "http://localhost:8000/api-token-auth/";
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: this.state.username, password: this.state.password }),
+      body: JSON.stringify({
+        username: this.state.username,
+        password: this.state.password,
+      }),
     };
     fetch(url, requestOptions)
       .then((response) => response.json())
-      .then((data) => localStorage.setItem('token', data.token));
+      .then((data) => {
+        localStorage.setItem("token", data.token);
+        this.setState({ token: data.token });
+      });
     event.preventDefault();
   }
 
   render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          <input
-            type="text"
-            value={this.state.username}
-            onChange={this.handleChange}
-          />
-          <input
-            type="password"
-            value={this.state.password}
-            onChange={this.handleChangePassword}
-          />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-    );
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      return (
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Name:
+            <input
+              type="text"
+              value={this.state.username}
+              onChange={this.handleChange}
+            />
+            <input
+              type="password"
+              value={this.state.password}
+              onChange={this.handleChangePassword}
+            />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+      );
+    } else {
+      return <UserList />;
+    }
   }
 }
