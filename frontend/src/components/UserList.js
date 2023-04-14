@@ -2,7 +2,7 @@ import React from "react";
 import List from "./List";
 
 export default class UserList extends React.Component {
-  state = { lists: null, loading: true };
+  state = { lists: [], loading: true };
 
   async componentDidMount() {
     const config = {
@@ -11,7 +11,8 @@ export default class UserList extends React.Component {
       },
     };
 
-    config.headers["Authorization"] = 'Token 829385739977507c5cb62ccc2c396575ac4925ec';
+    config.headers["Authorization"] =
+      "Token 829385739977507c5cb62ccc2c396575ac4925ec";
 
     var url = "http://127.0.0.1:8000/list/";
     const response = await fetch(url, config);
@@ -20,10 +21,13 @@ export default class UserList extends React.Component {
   }
 
   render() {
+    const listApi = this.state.lists;
+
     return (
       <div>
-        <List list_name={"Minha Lista"} />
-        <List list_name={"Minha Lista2"} />
+        {listApi.map((list) => (
+          <List key={list.id} list_name={list.name} />
+        ))}
       </div>
     );
   }
