@@ -3,9 +3,18 @@ import List from "./List";
 
 export default class UserList extends React.Component {
   state = { lists: null, loading: true };
+
   async componentDidMount() {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    config.headers["Authorization"] = 'Token 829385739977507c5cb62ccc2c396575ac4925ec';
+
     var url = "http://127.0.0.1:8000/list/";
-    const response = await fetch(url);
+    const response = await fetch(url, config);
     const data = await response.json();
     this.setState({ lists: data, loading: false });
   }
