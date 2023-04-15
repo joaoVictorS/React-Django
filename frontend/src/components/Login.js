@@ -37,7 +37,10 @@ export default class Login extends React.Component {
       });
     event.preventDefault();
   }
-
+  logout() {
+    localStorage.removeItem("token");
+    this.setState({ token: null });
+  }
   render() {
     const token = localStorage.getItem("token");
 
@@ -61,7 +64,12 @@ export default class Login extends React.Component {
         </form>
       );
     } else {
-      return <UserList />;
+      return (
+        <div>
+          <UserList />
+          <button onClick={() => this.logout()}>Logout</button>
+        </div>
+      );
     }
   }
 }
